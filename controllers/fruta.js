@@ -1,0 +1,134 @@
+'use strict'
+
+var Fruta = require('../models/fruta');
+
+function pruebas(req,res){
+  res.status(200).send({
+    message: 'Esta ruta es de prueba en mi api con mongo y nodeJS'
+  });
+}
+
+function saveFruta(req,res){
+  var fruta = new Fruta();
+
+  var params = req.body;
+  if (params.nombre) {
+    fruta.nombre = params.nombre;
+    fruta.color = params.color;
+
+    fruta.save((err, frutaStored) => {
+      if (err) {
+        res.status(500).send({
+          message : 'Error en el servidor'
+        });
+      }else {
+        if (frutaStored) {
+          res.status(200).send({
+            fruta: frutaStored
+          });
+        }else {
+          res.status(200).send({
+            message : 'No se a guardado la fruta'
+          });
+        }
+      }
+    });
+  }else {
+    res.status(200).send({
+      message : 'El nombre de la fruta es obligatorio'
+    });
+  }
+}
+
+function getFruta(req,res){
+  Fruta.find({}).exec((err,frutas) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error en el servidor'
+      });
+    }else {
+      if (frutas) {
+        res.status(200).send({
+          frutas
+        });
+      }else {
+        res.status(404).send({
+          message: 'No hay frutas'
+        });
+      }
+    }
+  });
+}
+
+function getSolo(req,res){
+  var frutaId = req.params.id;
+  Fruta.findById(frutaId).exec((err,frutas) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error en el servidor'
+      });
+    }else {
+      if (frutas) {
+        res.status(200).send({
+          frutas
+        });
+      }else {
+        res.status(404).send({
+          message: 'No existe la fruta'
+        });
+      }
+    }
+  });
+}
+
+function updateFruta(req,res){
+  var frutaId = req.params.id;
+  var update = req.body;
+  Fruta.findByIdAndUpdate(frutaId,update,{new:true}, (err,frutaUpdated) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error en el servidor'
+      });
+    }else {
+      if (frutaUpdated) {
+        res.status(200).send({
+          fruta: frutaUpdated
+        });
+      }else {
+        res.status(404).send({
+          message: 'No existe la fruta'
+        });
+      }
+    }
+  });
+}
+
+function deleteFruta(req,res){
+  var frutaId = req.params.id;
+  Fruta.findByIdAndRemove(frutaId, (err,frutaRemove) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error en el servidor'
+      });
+    }else {
+      if (frutaRemove) {
+        res.status(200).send({
+          fruta: frutaRemove
+        });
+      }else {
+        res.status(404).send({
+          message: 'No existe la fruta'
+        });
+      }
+    }
+  });
+}
+
+module.exports = {
+  pruebas,
+  saveFruta,
+  getFruta,
+  getSolo,
+  updateFruta,
+  deleteFruta
+};

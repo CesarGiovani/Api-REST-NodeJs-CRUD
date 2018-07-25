@@ -1,0 +1,20 @@
+{
+  "name": "curso-mongo-backend",
+  "version": "1.0.0",
+  "description": "Api REST del curso de MongoDB de visctor robles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "Cesar Giovani",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
